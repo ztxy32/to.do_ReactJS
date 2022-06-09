@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { v4 as uuidv4 } from 'uuid';
 
 import '../styles/tasklist.scss'
 
@@ -16,14 +17,31 @@ export function TaskList() {
 
   function handleCreateNewTask() {
     // Crie uma nova task com um id random, não permita criar caso o título seja vazio.
+    if(!newTaskTitle){
+      return window.alert("Task must've a title!")
+    }
+    const setNewTask = {
+      id: Math.random()*3,
+      title: newTaskTitle,
+      isComplete: false,
+    }
+
+    setTasks([...tasks, setNewTask])
+    console.log(setNewTask)
+    
   }
 
   function handleToggleTaskCompletion(id: number) {
     // Altere entre `true` ou `false` o campo `isComplete` de uma task com dado ID
+    const setToggle = tasks.map(item => item.id === id ? {...item, isComplete: !item.isComplete} : item)//o id do item é igual ao id passado no parametro? sim: copia o array usando o spread operator, sobrescrendo apenas a propriedade isComplete passando a mesma negacionada. não: retorna o item
+    setTasks(setToggle)
+
   }
 
   function handleRemoveTask(id: number) {
     // Remova uma task da listagem pelo ID
+    const filteredTask = tasks.filter(item => item.id !== id )// retorna todos os itens do array que o item.id é diferente do id
+    setTasks(filteredTask)
   }
 
   return (
